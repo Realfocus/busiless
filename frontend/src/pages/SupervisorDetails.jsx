@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
+
+const URL=import.meta.env.VITE_SERVER;
+
 const SupervisorDetails = () => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -11,7 +14,7 @@ const SupervisorDetails = () => {
     const fetchDetails = async () => {
       setLoading(true);
       try {
-        const response = await fetch(`http://localhost:8000/api/users/${id}`);
+        const response = await fetch(`${URL}/${id}`);
         if (!response.ok) {
           throw new Error(`API error: ${response.status}`);
         }

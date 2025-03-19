@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+const URL=import.meta.env.VITE_SERVER;
+
 const Signup = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
@@ -77,7 +79,7 @@ const Signup = () => {
         data.append("image", imageFile);
       }
 
-      const response = await fetch("http://localhost:8000/api/users/signup", {
+      const response = await fetch(`${URL}/signup`, {
         method: "POST",
 
         body: data,

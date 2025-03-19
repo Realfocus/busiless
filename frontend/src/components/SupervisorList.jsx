@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
+const URL=import.meta.env.VITE_SERVER;
+
 const SupervisorsList = () => {
   const [supervisors, setSupervisors] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -10,7 +12,7 @@ const SupervisorsList = () => {
     const fetchSupervisors = async () => {
       try {
         setLoading(true);
-        const response = await fetch("http://localhost:8000/api/users");
+        const response = await fetch(URL);
         const data = await response.json();
         console.log("data", data);
         const filteredSupervisors = data.users.filter(

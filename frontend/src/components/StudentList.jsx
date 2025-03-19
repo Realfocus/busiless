@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import {Link} from "react-router-dom"
 
+const URL=import.meta.env.VITE_SERVER;
+
 const StudentList = () => {
   const [students, setStudents] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -10,7 +12,7 @@ const StudentList = () => {
     const fetchStudents = async () => {
       try {
         setLoading(true);
-        const response = await fetch("http://localhost:8000/api/users");
+        const response = await fetch(URL);
         const data = await response.json();
         console.log("data", data);
         const filteredStudents = data.users.filter(
@@ -48,8 +50,6 @@ const StudentList = () => {
                 <h2 className="text-xl font-semibold">{student.fullName}</h2>
                 </Link>
                 <p>{student.role}</p>
-               
-                
               </div>
             </div>
            
