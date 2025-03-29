@@ -2,6 +2,9 @@ import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
 import userRoutes from "./routes/user.routes.js";
+import supervisorRoutes from "./routes/supervisor.routes.js";
+import studentRoutes from "./routes/student.routes.js";
+import groupRoutes from "./routes/group.routes.js";
 import "dotenv/config";
 
 const PORT = process.env.PORT;
@@ -13,6 +16,9 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/api/users", userRoutes);
+app.use("/api/supervisors", supervisorRoutes);
+app.use("/api/students", studentRoutes);
+app.use("/api/groups", groupRoutes);
 
 mongoose.connect(URL).then(() => {
   console.log("mongodb connection successful");
