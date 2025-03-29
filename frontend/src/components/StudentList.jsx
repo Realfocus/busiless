@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import {Link} from "react-router-dom"
+import { Link } from "react-router-dom"
 
-const URL=import.meta.env.VITE_SERVER;
+const URL = import.meta.env.VITE_SERVER;
 
 const StudentList = () => {
   const [students, setStudents] = useState([]);
@@ -12,14 +12,9 @@ const StudentList = () => {
     const fetchStudents = async () => {
       try {
         setLoading(true);
-        const response = await fetch(URL);
+        const response = await fetch(`${URL}/students`);
         const data = await response.json();
-        console.log("data", data);
-        const filteredStudents = data.users.filter(
-          (user) => user.userType === "student",
-        );
-
-        setStudents(filteredStudents);
+        setStudents(data.students);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -47,12 +42,12 @@ const StudentList = () => {
               />
               <div>
                 <Link to={`/students/${student._id}`}>
-                <h2 className="text-xl font-semibold">{student.fullName}</h2>
+                  <h2 className="text-xl font-semibold">{student.fullName}</h2>
                 </Link>
                 <p>{student.role}</p>
               </div>
             </div>
-           
+
           </div>
         ))}
       </div>

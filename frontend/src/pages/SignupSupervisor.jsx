@@ -1,43 +1,50 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-hot-toast";
 
-const URL=import.meta.env.VITE_SERVER;
+const URL = import.meta.env.VITE_SERVER;
 
-const Signup = () => {
+const SignupSupervisor = () => {
+  const [groups, setGroups] = useState([]);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [userType, setUserType] = useState("student");
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
     password: "",
     faculty: "",
     phone: "",
-    userType: "student",
-    course: "",
-    studentId: "",
-    honor: "",
-    role: "",
+    userType: "supervisor",
     specialisation: "",
     calendly: "",
+    group: ""
   });
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState("");
+
+  //fetch groups
+  useEffect(() => {
+    const fetchGroups = async () => {
+      try {
+        const response = await fetch(`${URL}/groups`);
+        if (!response.ok) {
+          throw new Error("Failed to fetch groups");
+        }
+        const groupsData = await response.json();
+        //console.log(groupsData);
+        setGroups(groupsData);
+      } catch (error) {
+        console.error("Error fetching groups:", error);
+      }
+    };
+    fetchGroups();
+  }, [])
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
       [name]: value,
-    });
-  };
-
-  const handleUserTypeChange = (e) => {
-    setUserType(e.target.value);
-    setFormData({
-      ...formData,
-      userType: e.target.value,
     });
   };
 
@@ -56,10 +63,9 @@ const Signup = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError("");
 
     if (!imageFile) {
-      setError("Profile image is required");
+      toast.error("Profile image is required");
       setLoading(false);
       return;
     }
@@ -74,14 +80,13 @@ const Signup = () => {
         }
       });
 
-      // Add image file - the backend expects it in the 'file' field
+      // Add image file - the backend expects it in the 'image' field
       if (imageFile) {
         data.append("image", imageFile);
       }
 
-      const response = await fetch(`${URL}/signup`, {
+      const response = await fetch(`${URL}/supervisors/signup`, {
         method: "POST",
-
         body: data,
       });
 
@@ -91,31 +96,28 @@ const Signup = () => {
         throw new Error(result.message || "Signup failed");
       }
 
-      // Success - navigate to login
-      navigate("/login");
+      // Success notification and navigation
+      toast.success("Registration successful!");
+      setTimeout(() => {
+        navigate("/login/supervisor");
+      }, 1000);
     } catch (err) {
-      setError(err.message);
+      toast.error(err.message || "Registration failed");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className=" bg-gray-100 flex flex-col justify-center sm:px-6 lg:px-8">
+    <div className="bg-gray-100 flex flex-col justify-center sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-          Create your account- Busiless
+          Supervisor Signup - Busiless
         </h2>
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-[80%]">
         <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-          {error && (
-            <div className="mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative">
-              {error}
-            </div>
-          )}
-
           <form className="space-y-6" onSubmit={handleSubmit}>
             {/* Full Name */}
             <div>
@@ -182,7 +184,7 @@ const Signup = () => {
               </div>
             </div>
 
-            {/* Faculty */}
+            {/* Faculty/Program */}
             <div>
               <label
                 htmlFor="faculty"
@@ -191,18 +193,20 @@ const Signup = () => {
                 Faculty *
               </label>
               <div className="mt-1">
-                <input
+                <select
                   id="faculty"
                   name="faculty"
-                  type="text"
                   required
                   value={formData.faculty}
                   onChange={handleChange}
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                />
+                  className="border w-full rounded p-2"
+                >
+                  <option value="faculty_of_engineering">Faculty of Engineering</option>
+                  <option value="faculty_of_computing_and_information_systems">Faculty of Computing and Information Systems</option>
+                  <option value="business_school">Business School</option>
+                </select>
               </div>
             </div>
-
             {/* Phone */}
             <div>
               <label
@@ -218,6 +222,66 @@ const Signup = () => {
                   type="tel"
                   required
                   value={formData.phone}
+                  onChange={handleChange}
+                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label
+                htmlFor="group"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Group *
+              </label>
+              <div className="mt-1">
+                <select name="group" id="group" className="border w-full rounded p-2" value={formData.group} onChange={handleChange}>
+                  {groups.map((group) => (
+
+                    <option key={group._id} value={group._id}>
+                      {group.name}
+                    </option>))}
+                </select>
+              </div>
+            </div>
+            {/* Specialisation */}
+            <div>
+              <label
+                htmlFor="specialisation"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Specialisation *
+              </label>
+              <div className="mt-1">
+                <textarea
+                  id="specialisation"
+                  name="specialisation"
+                  type="text"
+                  placeholder="Specialised in ..."
+                  required
+                  value={formData.specialisation}
+                  onChange={handleChange}
+                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                />
+              </div>
+            </div>
+            {/* calendly */}
+            <div>
+              <label
+                htmlFor="calendly"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Calendly *
+              </label>
+              <div className="mt-1">
+                <input
+                  id="calendly"
+                  name="calendly"
+                  type="text"
+                  placeholder="https://calendly.com/username"
+                  required
+                  value={formData.calendly}
                   onChange={handleChange}
                   className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                 />
@@ -298,160 +362,12 @@ const Signup = () => {
               </div>
             </div>
 
-            {/* User Type */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
-                User Type *
-              </label>
-              <div className="mt-1">
-                <select
-                  name="userType"
-                  value={userType}
-                  onChange={handleUserTypeChange}
-                  className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
-                >
-                  <option value="student">Student</option>
-                  <option value="supervisor">Supervisor</option>
-                </select>
-              </div>
-            </div>
-
-            {/* Conditional fields based on user type */}
-            {userType === "student" ? (
-              <div className="space-y-6">
-                {/* Course */}
-                <div>
-                  <label
-                    htmlFor="course"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    Course
-                  </label>
-                  <div className="mt-1">
-                    <input
-                      id="course"
-                      name="course"
-                      type="text"
-                      value={formData.course}
-                      onChange={handleChange}
-                      className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                    />
-                  </div>
-                </div>
-
-                {/* Student ID */}
-                <div>
-                  <label
-                    htmlFor="studentId"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    Student ID
-                  </label>
-                  <div className="mt-1">
-                    <input
-                      id="studentId"
-                      name="studentId"
-                      type="text"
-                      value={formData.studentId}
-                      onChange={handleChange}
-                      className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                    />
-                  </div>
-                </div>
-
-                {/* Honor */}
-                <div>
-                  <label
-                    htmlFor="honor"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    Honor
-                  </label>
-                  <div className="mt-1">
-                    <input
-                      id="honor"
-                      name="honor"
-                      type="text"
-                      value={formData.honor}
-                      onChange={handleChange}
-                      className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                    />
-                  </div>
-                </div>
-
-                {/* Role */}
-                <div>
-                  <label
-                    htmlFor="role"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    Role
-                  </label>
-                  <div className="mt-1">
-                    <input
-                      id="role"
-                      name="role"
-                      type="text"
-                      value={formData.role}
-                      onChange={handleChange}
-                      className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                    />
-                  </div>
-                </div>
-              </div>
-            ) : (
-              <div className="space-y-6">
-                {/* Specialisation */}
-                <div>
-                  <label
-                    htmlFor="specialisation"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    Specialisation
-                  </label>
-                  <div className="mt-1">
-                    <input
-                      id="specialisation"
-                      name="specialisation"
-                      type="text"
-                      value={formData.specialisation}
-                      onChange={handleChange}
-                      className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                    />
-                  </div>
-                </div>
-
-                {/* Calendly */}
-                <div>
-                  <label
-                    htmlFor="calendly"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    Calendly Link
-                  </label>
-                  <div className="mt-1">
-                    <input
-                      id="calendly"
-                      name="calendly"
-                      type="url"
-                      value={formData.calendly}
-                      onChange={handleChange}
-                      className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                    />
-                  </div>
-                </div>
-              </div>
-            )}
-
             <div>
               <button
                 type="submit"
                 disabled={loading}
-                className={`w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white ${
-                  loading
-                    ? "bg-indigo-400"
-                    : "bg-indigo-600 hover:bg-indigo-700"
-                } focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500`}
+                className={`w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white ${loading ? "bg-indigo-400" : "bg-indigo-600 hover:bg-indigo-700"
+                  } focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500`}
               >
                 {loading ? "Signing up..." : "Sign up"}
               </button>
@@ -472,7 +388,7 @@ const Signup = () => {
 
             <div className="mt-6">
               <button
-                onClick={() => navigate("/login")}
+                onClick={() => navigate("/login/supervisor")}
                 className="w-full flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
               >
                 Sign in
@@ -485,4 +401,4 @@ const Signup = () => {
   );
 };
 
-export default Signup;
+export default SignupSupervisor;

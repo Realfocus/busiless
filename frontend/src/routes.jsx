@@ -4,15 +4,21 @@ import Home from "./pages/Home";
 import Students from "./pages/Students";
 import StudentDetails from "./pages/StudentDetails";
 import SupervisorDetails from "./pages/SupervisorDetails";
+import SignupStudent from "./pages/SignupStudent"
 import Supervisors from "./pages/Supervisors";
-import Signup from "./pages/Signup";
-import Login from "./pages/Login";
+import LoginSupervisor from "./pages/LoginSupervisor";
 import About from "./pages/About";
+import AddGroup from "./pages/AddGroup";
+import SignupSupervisor from "./pages/SignupSupervisor";
+import Groups from "./pages/Groups";
+import LoginStudent from "./pages/LoginStudent";
+import RootAuth from "./pages/RootAuth";
+import { AuthProvider } from "./components/AuthProvider";
 
 export const router = createBrowserRouter([
   {
     path: "/",
-    element: <RootLayout />,
+    element: <AuthProvider><RootLayout /></AuthProvider>,
     children: [
       {
         index: true,
@@ -31,9 +37,14 @@ export const router = createBrowserRouter([
         path: "/supervisors/:id",
         element: <SupervisorDetails />,
       },
-      { path: "/signup", element: <Signup /> },
-      { path: "/login", element: <Login /> },
-      {path:"/about",element:<About/>}
+      { path: "/groups", element: <Groups /> },
+      { path: "/add-group", element: <AddGroup /> },
+      { path: "/students/signup", element: <SignupStudent /> },
+      { path: "/auth", element: <RootAuth /> },
+      { path: "/supervisors/signup", element: <SignupSupervisor /> },
+      { path: "/login/supervisor", element: <LoginSupervisor /> },
+      { path: "/login/student", element: <LoginStudent /> },
+      { path: "/about", element: <About /> }
     ],
   },
 ]);

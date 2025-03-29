@@ -5,10 +5,10 @@ const ProfilePic = () => {
   const [pic, setPic] = useState(null);
 
   useEffect(() => {
-    const accessToken = localStorage.getItem("loginToken");
+    const accessToken = sessionStorage.getItem("loginToken");
     if (accessToken) {
-      setName(localStorage.getItem("fullName") || "");
-      setPic(localStorage.getItem("image") || "");
+      setName(sessionStorage.getItem("fullName") || "");
+      setPic(sessionStorage.getItem("image") || "");
     }
   }, []);
 

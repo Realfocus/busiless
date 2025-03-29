@@ -2,19 +2,19 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 
-const URL=import.meta.env.VITE_SERVER;
+const URL = import.meta.env.VITE_SERVER;
 
 const SupervisorDetails = () => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { id } = useParams();
- 
+
   useEffect(() => {
     const fetchDetails = async () => {
       setLoading(true);
       try {
-        const response = await fetch(`${URL}/${id}`);
+        const response = await fetch(`${URL}/supervisors/${id}`);
         if (!response.ok) {
           throw new Error(`API error: ${response.status}`);
         }
@@ -29,7 +29,7 @@ const SupervisorDetails = () => {
         setLoading(false);
       }
     };
- 
+
     fetchDetails();
   }, [id]);
 
@@ -38,14 +38,14 @@ const SupervisorDetails = () => {
       <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
     </div>
   );
-  
+
   if (error) return (
     <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mx-auto my-4 max-w-2xl">
       <p className="font-bold">Error:</p>
       <p>{error}</p>
     </div>
   );
-  
+
   if (!user) return (
     <div className="text-center p-8">
       <p className="text-lg text-gray-700">No supervisor data found</p>
@@ -54,15 +54,15 @@ const SupervisorDetails = () => {
 
   // Using the data from the reference image
   const supervisorData = {
-    fullName: user.fullName ,
-    role: user.role ,
+    fullName: user.fullName,
+    role: user.role,
     faculty: user.faculty,
     specialisation: user.specialisation,
-    honor: user.honor ,
-    email: user.email ,
-    calendly: user.calendly ,
-    studentId: user.studentId ,
-    course: user.course ,
+    honor: user.honor,
+    email: user.email,
+    calendly: user.calendly,
+    studentId: user.studentId,
+    course: user.course,
     image: user.image
   };
 
@@ -81,9 +81,9 @@ const SupervisorDetails = () => {
         <div className="md:flex">
           <div className="md:w-1/3 bg-blue-800 p-8 text-white">
             <div className="flex justify-center">
-              <img 
-                src={supervisorData.image} 
-                alt={supervisorData.fullName} 
+              <img
+                src={supervisorData.image}
+                alt={supervisorData.fullName}
                 className="h-48 w-48 rounded-full object-cover border-4 border-white"
                 onError={(e) => {
                   e.target.src = "https://via.placeholder.com/150";
@@ -111,13 +111,13 @@ const SupervisorDetails = () => {
               </div>
             </div>
           </div>
-          
+
           <div className="md:w-2/3 p-8">
             <div className="mb-6">
               <h2 className="text-2xl font-bold border-b pb-2">Supervisor Profile</h2>
               <p className="mt-4 text-gray-600">
-                {supervisorData.fullName} is a distinguished supervisor specializing in {supervisorData.specialisation}. 
-                They are currently associated with the {supervisorData.faculty} department and recognized for their 
+                {supervisorData.fullName} is a distinguished supervisor specializing in {supervisorData.specialisation}.
+                They are currently associated with the {supervisorData.faculty} department and recognized for their
                 contributions in the field.
               </p>
             </div>

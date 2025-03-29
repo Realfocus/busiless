@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
-const URL=import.meta.env.VITE_SERVER;
+const URL = import.meta.env.VITE_SERVER;
 
 const SupervisorsList = () => {
   const [supervisors, setSupervisors] = useState([]);
@@ -12,14 +12,9 @@ const SupervisorsList = () => {
     const fetchSupervisors = async () => {
       try {
         setLoading(true);
-        const response = await fetch(URL);
+        const response = await fetch(`${URL}/supervisors`);
         const data = await response.json();
-        console.log("data", data);
-        const filteredSupervisors = data.users.filter(
-          (user) => user.userType === "supervisor",
-        );
-
-        setSupervisors(filteredSupervisors);
+        setSupervisors(data.supervisors);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -49,18 +44,19 @@ const SupervisorsList = () => {
                 className="w-16 h-16 rounded-full object-cover"
               />
               <div>
-           
+
                 <Link to={`/supervisors/${supervisor._id}`}>
-                <h2 className="text-xl font-semibold">{supervisor.fullName}</h2>
+                  <h2 className="text-xl font-semibold">{supervisor.fullName}</h2>
                 </Link>
                 <p className="text-gray-600">{supervisor.specialisation}</p>
-                <p className="text-sm text-gray-500">{supervisor.faculty}</p>
+                <p className="text-sm text-gray-500 line-clamp-1">{supervisor.faculty.substring(0, 20)
+                }...</p>
               </div>
               <div className="mt-4">
                 <a href={supervisor.phone}></a>
               </div>
             </div>
-            
+
           </div>
         ))}
       </div>
