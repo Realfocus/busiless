@@ -14,6 +14,7 @@ import Groups from "./pages/Groups";
 import LoginStudent from "./pages/LoginStudent";
 import RootAuth from "./pages/RootAuth";
 import { AuthProvider } from "./components/AuthProvider";
+import ContactForm from "./pages/ContactPage";
 
 export const router = createBrowserRouter([
   {
@@ -44,6 +45,7 @@ export const router = createBrowserRouter([
       { path: "/supervisors/signup", element: <SignupSupervisor /> },
       { path: "/login/supervisor", element: <LoginSupervisor /> },
       { path: "/login/student", element: <LoginStudent /> },
+      { path: "/message", element: <ContactForm /> },
       { path: "/about", element: <About /> }
     ],
   },
