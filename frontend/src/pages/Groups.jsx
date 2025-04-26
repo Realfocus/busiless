@@ -48,6 +48,7 @@ export default function Groups() {
                       <p className="font-medium">{student.fullName}</p>
                       <p className="text-sm text-gray-600">{student.email}</p>
                       <p className="text-sm">ID: {student.studentId}</p>
+                      <p className="text-sm">Role: {student.role}</p>
                     </div>
                   ))
                 ) : (
