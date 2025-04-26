@@ -10,22 +10,24 @@ function WelcomeSection({ fullname, profilepic }) {
 
 
   return (
-    <div className="bg-purple-500 rounded-lg overflow-hidden relative">
-      <div className="p-8 text-white relative z-10 flex">
-        <div className="flex-1">
-          <div className="text-sm mb-4">{getTodayDate()}</div>
-          <h1 className="text-4xl font-bold mb-2">Welcome back, {fullname}!</h1>
-          <p>Always stay updated in your student portal</p>
-        </div>
-        <div className="flex-1 flex justify-end items-center">
-          <div className="relative h-48 w-full">
-            <div className="absolute right-0 bottom-0">
-              <img src={profilepic} alt="Profile Image of student" className="object-contain" />
-            </div>
-          </div>
+    <div className="bg-purple-500 rounded-lg overflow-hidden shadow-lg">
+    <div className="p-8 text-white flex flex-col md:flex-row items-center">
+      <div className="flex-1 mb-6 md:mb-0">
+        <div className="text-sm mb-4">{getTodayDate()}</div>
+        <h1 className="text-4xl font-bold mb-2">Welcome back, {fullname}!</h1>
+        <p>Always stay updated in your student portal</p>
+      </div>
+      <div className="flex-1 flex justify-center md:justify-end">
+        <div className="relative h-32 w-32 md:h-48 md:w-48 rounded-full overflow-hidden border-4 border-white shadow-md">
+          <img 
+            src={profilepic} 
+            alt="Profile" 
+            className="h-full w-full object-cover"
+          />
         </div>
       </div>
     </div>
+  </div>
   )
 }
 

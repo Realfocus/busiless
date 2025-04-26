@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
+import { Eye, EyeOff } from 'lucide-react';
 
 const URL = import.meta.env.VITE_SERVER;
 
@@ -8,6 +9,7 @@ const SignupSupervisor = () => {
   const [groups, setGroups] = useState([]);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [showPassword,setShowPassword]=useState(false)
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -21,6 +23,11 @@ const SignupSupervisor = () => {
   });
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState("");
+
+  const toggleShowPassword = (e) => {
+    e.preventDefault(); // Prevent form submission
+    setShowPassword(prevState => !prevState);
+  };
 
   //fetch groups
   useEffect(() => {
@@ -168,19 +175,26 @@ const SignupSupervisor = () => {
                 htmlFor="password"
                 className="block text-sm font-medium text-gray-700"
               >
-                Password *
+                Password
               </label>
-              <div className="mt-1">
+              <div className="mt-1 relative">
                 <input
                   id="password"
                   name="password"
-                  type="password"
-                  autoComplete="new-password"
+                  type={showPassword ? "text" : "password"}
+                  autoComplete="current-password"
                   required
                   value={formData.password}
                   onChange={handleChange}
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm pr-10"
                 />
+                <button
+                  type="button"
+                  onClick={toggleShowPassword}
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-600 hover:text-gray-800 focus:outline-none"
+                >
+                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
               </div>
             </div>
 
