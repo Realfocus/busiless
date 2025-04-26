@@ -146,7 +146,7 @@ const StudentDetails = () => {
                 <div className="bg-gray-50 p-3 rounded">
                   {/*change chapter here */}
                   <span className="text-sm font-medium text-gray-500">Project Chapter</span>
-                  <p>Chapter 4 of 6</p>
+                  <p>Chapter 3 of 5</p>
                 </div>
               </div>
             </div>
