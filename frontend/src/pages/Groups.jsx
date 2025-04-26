@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
 const URL = import.meta.env.VITE_SERVER;
 
@@ -71,6 +72,9 @@ export default function Groups() {
             </div>
           </div>
         ))}
+      </div>
+      <div className="my-5">
+      <Link to="/add-group" className="p-2 rounded text-white bg-blue-600">Add-group</Link>
       </div>
     </div>
   )
