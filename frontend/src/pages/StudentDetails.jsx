@@ -3,6 +3,8 @@ import { useParams } from "react-router-dom";
 
 const URL = import.meta.env.VITE_SERVER;
 
+//chapter and deadline
+
 const StudentDetails = () => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -137,45 +139,18 @@ const StudentDetails = () => {
               <div className="mt-2 grid grid-cols-2 gap-4">
                 <div className="bg-gray-50 p-3 rounded">
                   <span className="text-sm font-medium text-gray-500">Year of Study</span>
-                  <p>3rd Year</p>
+                  <p>4th Year</p>
                 </div>
+              </div>
+              <div className="mt-2 grid grid-cols-2 gap-4">
                 <div className="bg-gray-50 p-3 rounded">
-                  <span className="text-sm font-medium text-gray-500">Semester</span>
-                  <p>1st Semester</p>
-                </div>
-                <div className="bg-gray-50 p-3 rounded">
-                  <span className="text-sm font-medium text-gray-500">CGPA</span>
-                  <p>3.75/4.0</p>
-                </div>
-                <div className="bg-gray-50 p-3 rounded">
-                  <span className="text-sm font-medium text-gray-500">Credits Completed</span>
-                  <p>78/120</p>
+                  {/*change chapter here */}
+                  <span className="text-sm font-medium text-gray-500">Project Chapter</span>
+                  <p>Chapter 4 of 6</p>
                 </div>
               </div>
             </div>
-
-            <div className="mb-6">
-              <h3 className="text-xl font-semibold">Current Courses</h3>
-              <ul className="mt-2 grid grid-cols-1 gap-2">
-                <li className="bg-gray-50 p-3 rounded flex justify-between">
-                  <span>Advanced Database Systems</span>
-                  <span className="text-green-600 font-medium">CSC 301</span>
-                </li>
-                <li className="bg-gray-50 p-3 rounded flex justify-between">
-                  <span>Web Application Development</span>
-                  <span className="text-green-600 font-medium">CSC 305</span>
-                </li>
-                <li className="bg-gray-50 p-3 rounded flex justify-between">
-                  <span>Computer Networks</span>
-                  <span className="text-green-600 font-medium">CSC 310</span>
-                </li>
-                <li className="bg-gray-50 p-3 rounded flex justify-between">
-                  <span>Software Engineering</span>
-                  <span className="text-green-600 font-medium">CSC 315</span>
-                </li>
-              </ul>
-            </div>
-
+            
             <div className="border-t pt-4">
               <h3 className="text-xl font-semibold">Contact Information</h3>
               <div className="mt-2 flex flex-col sm:flex-row gap-4">
