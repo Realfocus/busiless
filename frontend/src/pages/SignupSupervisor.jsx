@@ -9,6 +9,7 @@ const SignupSupervisor = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
+
     fullName: "",
     email: "",
     password: "",
