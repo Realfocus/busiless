@@ -4,7 +4,7 @@ import Sidebar from "./components/Sidebar";
 
 export default function RootLayout() {
   return (
-    <div className="flex h-screen">
+    <div className="flex min-h-screen">
       <Sidebar />
       <div className="flex flex-col flex-1 overflow-hidden">
         <Navbar />
